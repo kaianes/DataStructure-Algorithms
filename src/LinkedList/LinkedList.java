@@ -1,3 +1,5 @@
+package LinkedList;
+
 /* \
  * This archive defines a linked list
  * has the behaviors: add, get, remove, size
@@ -6,17 +8,17 @@
  * remembering that to add or remove from the middle of the list you need to operate the pointer correctly
  */ 
 
-class LinkedList {
+public class LinkedList <T> {
 
-    private Node head;
+    private Node <T> head;
     private int listSize;
 
     public LinkedList() {
-        head = new Node(null);
+        head = new Node<>(null);
         listSize = 0;
     }
 
-    public void add(Object data, int index) 
+    public void add(T data, int index) 
     // adds the element 'data' to the specified position in the list.
     {
         // Security check for index
@@ -25,14 +27,14 @@ class LinkedList {
         }
 
        // traverse the list to find the node before the index
-         Node current = head;
+         Node <T> current = head;
          for (int i = 0; i < index; i++) {
              current = current.getNext();
          }
          // NODE current now has the POINTER value of the node to be pointed at
 
          // create the new node and connect it to the next
-         Node newNode = new Node(data);
+         Node <T> newNode = new Node<>(data);
          newNode.setNext(current.getNext());
 
         // now connect the previous node to the new node
@@ -40,7 +42,7 @@ class LinkedList {
             listSize++;
     }
 
-    public Object get(int index)
+    public T get(int index)
     // returns the element at the specified position in the list.
     {
 
@@ -49,7 +51,7 @@ class LinkedList {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + listSize);
         }
 
-        Node current = head; // Start from the head
+        Node <T> current = head; // Start from the head
         for (int i = 0; i <= index; i++) {
             current = current.getNext(); // Move to the next node
         }
@@ -64,14 +66,14 @@ class LinkedList {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + listSize);
         }
 
-        Node current = head;
+        Node <T> current = head;
         for (int i = 0; i < index; i++) {
             current = current.getNext();
         } // current is now the node before the index
 
-        Node removalNode = current.getNext(); // Node to be removed
+        Node <T> removalNode = current.getNext(); // Node to be removed
 
-        Node nodeNext = removalNode.getNext(); // Node after the one to be removed\
+        Node <T> nodeNext = removalNode.getNext(); // Node after the one to be removed
 
         current.setNext(nodeNext);
 

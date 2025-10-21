@@ -1,3 +1,5 @@
+package LinkedList;
+
 /**
  * Esse arquivo define um nó de uma linked list
  * tem os comportamentos: getData, setData, getNext, setNext
@@ -7,32 +9,32 @@
  */
 
 
-class Node {
-    Node next = null; // Pointer to the next element
-    Object data;
+class Node <T> {
+    Node<T> next = null; // Pointer to the next element
+    T data;
 
-    public Node(Object data) {
+    public Node(T data) {
         this.data = data;
     }
 
-    public Node(Object data, Node next) {
+    public Node(T data, Node<T> next) {
         this.data = data;
         this.next = next;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object value) {
+    public void setData(T value) {
         data = value;
     }
 
-    public Node getNext() {
+    public Node<T> getNext() {
         return next;
     }
 
-    public void setNext(Node nextNode) {
+    public void setNext(Node<T> nextNode) {
         next = nextNode;
     }
 }
