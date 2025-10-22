@@ -1,14 +1,14 @@
-package Stack;
+package MyStack;
 // LIFO - Last In First Out
 
 import LinkedList.LinkedList;
 
-public class Stack<T> {
+public class MyStack<T> {
     // Using LinkedList to implement Stack
     private LinkedList<T> list;
     
     // Constructor
-    public Stack() {
+    public MyStack() {
         this.list = new LinkedList<>();
     }
     
@@ -53,6 +53,13 @@ public class Stack<T> {
         
         int index = list.size() - 1;
         return list.get(index);
+    }
+
+    // For testing purposes: print the stack elements
+    public void printStack() {
+        for (int i = list.size() - 1; i >= 0; i--) {
+            System.out.println(list.get(i));
+        }
     }
 
 }

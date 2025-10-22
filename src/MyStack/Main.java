@@ -1,8 +1,8 @@
-package Stack; 
+package MyStack;
 
 public class Main {
     public static void main(String[] args) {
-        Stack<String> stack = new Stack<>();
+        MyStack<String> stack = new MyStack<>();
 
         System.out.println("🔹 Criando pilha...");
         System.out.println("Is it empty? " + stack.isEmpty());
@@ -29,7 +29,7 @@ public class Main {
             System.out.println("\nAttempting to pop from empty stack:");
             stack.pop();
         } catch (IllegalStateException e) {
-            System.out.println("⚠️  Error caught: " + e.getMessage());
+            System.out.println("⚠️  Erro capturado: " + e.getMessage());
         }
     }
 }
