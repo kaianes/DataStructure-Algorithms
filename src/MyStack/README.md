@@ -4,7 +4,7 @@
 
 A Stack ADT (Abstract Data Type) is a collection that follows the LIFO principle — *Last In, First Out*. It allows elements to be inserted and removed only from the top of the structure. This behavior is useful for managing reversible operations such as *undo actions*, *back navigation in browsers*, and *function call management in programming*.
 
-### Operation
+### Operations
 
 - `push(x)` - adds an element `x` to the top of the stack.
 - `peek()` - returns (but does not remove) the element at the top.
