@@ -145,21 +145,21 @@ full.
 Algorithm for the copying:
 
 ```java
+  // Doubles the size of the underlying array
     private void grow() {
-            int newCapacity = data.length * 2;
-            int[] newArray = new int[newCapacity];
+        int newCapacity = data.length * 2; // double the current size
+        char[] newArray = new char[newCapacity];
 
-            for (int i = 0; i < size; i++) {
-                newArray[i] = data[(front + i) % data.length];
-            }
-
-            data = newArray;
-            front = 0;
-            rear = size;
+        // copy elements in logical order, respecting the circular queue
+        for (int i = 0; i < size; i++) {
+            newArray[i] = data[(front + i) % data.length];
         }
+
+        data = newArray;
+        front = 0;
+        rear = size;
+    }
 ```
-
-
 
 - Creates a larger array,
 
@@ -168,3 +168,7 @@ Algorithm for the copying:
 - Puts them in order inside the new array,
 
 - Resets the pointers (head and tail).
+
+> The full implementation can be found on the `CircularArrayQueue.java` file, and the test on the `MainCircularArrayQueue.java`, this is what is expected to be printed on the terminal after the run:
+
+![example](images/testCircularArrrayTerminal.png)
