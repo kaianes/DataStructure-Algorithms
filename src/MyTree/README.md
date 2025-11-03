@@ -282,23 +282,76 @@ In other words:
 
 ## 12. Show me the code!
 
-`AVLNode.java`
-Implementes the nodes
+**(a) Inspect the recursive implementation of methods such as countNodes, search and the three
+traversals and ensure that you understand how they work. Think how you could implement
+these without recursion.**
 
-`AVLTree.java`
+`AVLNode.java` - Implementes the nodes.
 
-`AVLTreeTest.java`
+`AVLTree.java` -  Implementes the tree basic logic and AVL (self‑balancing binary search).
 
-Think how you could implement these without recursion.
+`AVLTreeTest.java` - Test the logic.
 
-(b) Investigate the insert method. Work through some examples trees, perhaps using the VisuAlgo website, to ensure you understand why it is correct.
+The methods `countNodes`, `search` and the three traversals use recursion, but could be implemented using iterations.
 
-(c) Read the rotateWithLeftChild and rotateWithRightChild methods and count the number of links changed by their implementation; what is their complexity (O(. . .))?
+**(b) Investigate the insert method. Work through some examples trees, perhaps using the VisuAlgo website, to ensure you understand why it is correct.**
+The code in the insertion logic creates a new node after finding the correct place at the tree. There is a condition to insert the new node based on the value, if it is less than the node in question the new node is inserted at the left side of the tree, the is also a verification of the height, to kep the tree balanced with the methods `rotateWithLeftChild` or `doubleWithLeftChild`. If the value of the new node is better than the node in question, the new node is inserted at the right side of the tree with the verification of the node's height and the rotations `rotateWithRightChild` and `doubleWithRightChild` to keep the tree balanced.
+
+**(c) Read the `rotateWithLeftChild` and `rotateWithRightChild` methods and count the number of links changed by their implementation; what is their complexity (O(. . .))?**
+
+Both `rotateWithLeftChild` and `rotateWithRightChild` change two links inside their implementation:
+
+* `rotateWithLeftChild` reassigns:
+
+  1. `k2.left = k1.right;`
+  2. `k1.right = k2;`
+
+* `rotateWithRightChild` reassigns:
+
+  1. `k1.right = k2.left;`
+  2. `k2.left = k1;`
+
+In both cases, only a constant number of pointers (2 links) are modified.
+
+ **Complexity:**
+
+* **Time complexity:** O(1)
+* **Space complexity:** O(1)
+
+Because the number of operations does not depend on the size of the tree — each rotation always performs a fixed number of pointer changes.
+
 
 ## 13. Investigate the run time performance in AVL trees for
 
 **(a) search**
+Search follows one root-to-leaf path exactly like a BST:
+
+* Work per level: constant (compare + choose left/right).
+* Path length: at most `h = Θ(log n)`.
+* **Time:** `O(h) = O(log n)`.
+* **Space:** `O(1)` iterative (or `O(h)` recursive stack).
+
 
 **(b) insertion**
 
+Steps:
+
+1. **BST insert** down one path → `O(h)`.
+2. **Walk back up** updating heights → at most `h` nodes.
+3. At the **first** unbalanced ancestor, do **one rotation (single or double)** = **O(1)**.
+   (In AVL insertion, fixing the first unbalanced node is enough; higher ancestors won’t need further rotations.)
+4. Continue height updates on the way up (constant per node).
+
+Total = `O(h) + O(1) + O(h)` = **O(log n)**.
+
+
 **(c) deletion and explain why they are all O(log n).**
+
+Steps:
+
+1. **BST delete** (find node, maybe swap with predecessor/successor) along one path → `O(h)`.
+2. **Walk back up** updating heights; after deletion, **multiple ancestors can become unbalanced**.
+3. For each unbalanced ancestor, perform **at most one rotation (single/double)** = **O(1)** each.
+   In the worst case you may rotate at **several** levels, but there are only `h` of them.
+
+Total = `O(h)` work for the path + up to `O(h)` constant-time fixes = **O(log n)**.
