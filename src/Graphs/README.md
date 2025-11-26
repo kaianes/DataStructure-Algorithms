@@ -111,3 +111,119 @@ Edges {C, E}, {D, F} and {E, F} are cross edges, the rest are discovery (tree) e
 | 5    | [E, F]         | {A, B, C, D, E, F} |
 | 6    | [F]             | {A, B, C, D, E, F} |
 | 7    | []                | {A, B, C, D, E, F} |
+
+---
+
+### Exercises Week 9
+
+![Incidence Matrix](images/incidence-matrix1.png)
+
+## 1. Draw the graph corresponding to the incidence matrix above.
+
+![digraph](images/digraph.png)
+
+## 2. Perform a depth first traversal on your graph from exercise 1 starting from vertex A and selecting edges in alphabetic order of end vertex label.
+
+DFS(A): A -> B -> C -> D
+
+## 3. Perform a breadth first traversal on your graph from exercise 1 starting from vertex A and selecting edges in alphabetic order of end vertex label.
+BFS(A): A -> B -> C -> D
+
+Breadth-First Queue States: [A], [B, C], [C, D], [D]
+
+- From A: Enqueue B, C
+- From B: Enqueue D
+- From C: No new nodes to enqueue
+- From D: No new nodes to enqueue
+
+## 4. Apply Floyd-Warshal’s Algorithm to your graph from exercise 1, numbering the vertices in alphabetic order.
+
+Floyd-Warshal’s Algorithm is responsible for findinf out whether every vertex can reach every other vertex by creating a matrix that shows all of those conections.
+
+At each step, we check whether going through the intermediate node k gives us a shorter path from i to j.
+If the path i → k → j is shorter than the current known distance, we update it.
+
+(D⁰) Initial Adjacency Matrix:
+|       | A | B | C | D |
+| ----- | - | - | - | - |
+| **A** | 0 | 1 | 1 | ∞ |
+| **B** | ∞ | 0 | 1 | ∞ |
+| **C** | ∞ | ∞ | 0 | 1 |
+| **D** | 1 | ∞ | ∞ | 0 |
+
+**a) Using A as intermediate (k = A):**
+check if any path i → A → j is shorter.
+
+- D → B = 2
+- D → C = 2
+
+(D¹) Updated Adjacency Matrix:
+| From\To | A | B | C | D |
+| ------- | - | - | - | - |
+| **A**   | 0 | 1 | 1 | ∞ |
+| **B**   | ∞ | 0 | 1 | ∞ |
+| **C**   | ∞ | ∞ | 0 | 1 |
+| **D**   | 1 | 2 | 2 | 0 |
+
+**b) Using B as intermediate (k = B):**
+check if any path i → B → j is shorter.
+
+no updates (D² = D¹).
+
+**c) Using C as intermediate (k = C):**
+check if any path i → C → j is shorter.
+
+- A → D = 2
+- B → D = 2
+
+(D³) Updated Adjacency Matrix:
+| From\To | A | B | C | D |
+| ------- | - | - | - | - |
+| **A**   | 0 | 1 | 1 | 2 |
+| **B**   | ∞ | 0 | 1 | 2 |
+| **C**   | ∞ | ∞ | 0 | 1 |
+| **D**   | 1 | 2 | 2 | 0 |
+
+**d) Using D as intermediate (k = D):**
+check if any path i → D → j is shorter.
+
+- B → A = 3
+- C → A = 2
+- C → B = 3
+
+(D⁴) Final Adjacency Matrix:
+| From\To | A | B | C | D |
+| ------- | - | - | - | - |
+| **A**   | 0 | 1 | 1 | 2 |
+| **B**   | 3 | 0 | 1 | 2 |
+| **C**   | 2 | 3 | 0 | 1 |
+| **D**   | 1 | 2 | 2 | 0 |
+
+**This final matrix D⁴ contains all shortest-path distances between every pair of vertices.**
+
+## 5. Apply the algorithm for topological ordering of the vertices in the DAG given by the following incidence matrix.
+
+![Incidence Matrix](images/incidence-matrix2.png)
+
+***A. Find all vertices with no predecessors.***    - EX: Vertex A has no predecessors.
+***B. Pick one (or all) such vertices. Assign them the next topological number.***
+***C. Output it and remove it along with its outgoing edges from the graph.***    - EX: Output A, remove edges A→B and A→C.
+***D. Repeat steps 1-3 until all vertices are output.***
+
+#### Steps:
+1. In-degrees:
+
+   * in(A)=0, in(B)=1, in(C)=1, in(D)=1, in(E)=1, in(F)=2, in(G)=2, in(H)=1
+2. Start with vertex of in-degree 0 → **A**
+3. Remove A, update in-degrees of B,C,D → all become 0
+   Next in alphabetical order: **B**, **C**, **D**
+4. Remove B → E becomes 0
+5. Remove C → F’s in-degree drops from 2 to 1
+6. Remove D → G’s in-degree drops from 2 to 1
+7. Remove E → F becomes 0, H becomes 0
+8. Remove F → G becomes 0
+9. Remove G, then H
+
+One valid topological ordering (and the one the algorithm gives if you always pick the smallest label) is:
+
+> **A, B, C, D, E, F, G, H**
