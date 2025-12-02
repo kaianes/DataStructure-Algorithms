@@ -388,3 +388,82 @@ $O(V + E)$
 ---
 
 # Task 4: Hash Table
+
+The hash table has a size of 11 slots (0 to 10) and uses open addressing with double hashing for collision resolution.
+
+**{key : [22, 12, 13, 24, 14, 16, 27, 20, 31, 10]}**
+
+**Primary hash function:** $h1(x) = x \mod 11$
+
+**Secondary hash function:** $h2(x) = (x \mod 3) + 1$
+
+### a) Insertion Trace Table (for my own understanding)
+
+| Step | Key | h1(x) | Initial Index | Collision? | h2(x) | Inserted Index | Explanation                                                  |
+|------|-----|-------|---------------|------------|-------|--------------|--------------------------------------------------------------|
+| 1    | 22  | 0     | 0             | No         | --    | 0            | P0 - Inserted at index 0                                          |
+| 2    | 12  | 1     | 1             | No         | --    | 1            | P1 - Inserted at index 1                                          |
+| 3    | 13  | 2     | 2             | No         | --    | 2            | P2 - Inserted at index 2                                          |
+| 4    | 24  | 2     | 2             | Yes        | 1     | 3            | (P2) Collision at 2; (2nd attempt → 2 + 1) P3 → inserted at index 3     |
+| 5    | 14  | 3     | 3             | Yes        | 3     | 6            | (P3) Collision at 3; (2nd attempt → 3 + 3) P6 → inserted at index 6     |
+| 6    | 16  | 5     | 5             | No         | --    | 5            | P5 - Inserted at index 5                                          |
+| 7    | 27  | 5     | 5             | Yes        | 1     | 7            | (P5) Collision at 5; (2nd attempt → 5+1) P6 (occupied), then (3rd attempt → 6+1) P7 → inserted at index 7      |
+| 8    | 20  | 9     | 9             | No         | --    | 9            | P9 - Inserted at index 9                                          |
+| 9    | 31  | 9     | 9             | Yes        | 2     | 4            | (P9) Collisions at 9, (2nd attempt → 9+2 → round the array to index 0 → P0 → occupied), (3rd attempt - 0+2) P2 (occupied); (4th attempt - 2+2) P4 → inserted at index 4  |
+| 10   | 10  | 10    | 10            | No         | --    | 10           | P10 - Inserted at index 10                                         |
+
+### b) Final Hash Table State
+| Bucket | 0  | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8 | 9  | 10 |
+| ------ | -- | -- | -- | -- | -- | -- | -- | -- | - | -- | -- |
+| Value  | 22 | 12 | 13 | 24 | 31 | 16 | 14 | 27 | — | 20 | 10 |
+
+
+### c) Hash Table trace 1
+
+P0
+I22@0
+P1
+I12@1
+P2
+I13@2
+P2
+P3
+I24@3
+P3
+P6
+I14@6
+P5
+I16@5
+P5
+P6
+P7
+I27@7
+P9
+P0
+P2
+P4
+I31@4
+P10
+I10@10
+
+### d) Algorithm
+
+```java
+int hash1(int key) {
+    return key % 11;
+}
+int hash2(int key) {
+    return (key % 3) + 1;
+}
+
+void insert(int key) {
+    int index = hash1(key);
+    int stepSize = hash2(key);
+    while (table[index] != null) { // Collision occurred
+        index = (index + stepSize) % tableSize; // Double hashing
+    }
+    table[index] = key; // Insert key
+}
+
+
+```
