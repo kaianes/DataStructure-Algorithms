@@ -409,7 +409,7 @@ The hash table has a size of 11 slots (0 to 10) and uses open addressing with do
 | 6    | 16  | 5     | 5             | No         | --    | 5            | P5 - Inserted at index 5                                          |
 | 7    | 27  | 5     | 5             | Yes        | 1     | 7            | (P5) Collision at 5; (2nd attempt → 5+1) P6 (occupied), then (3rd attempt → 6+1) P7 → inserted at index 7      |
 | 8    | 20  | 9     | 9             | No         | --    | 9            | P9 - Inserted at index 9                                          |
-| 9    | 31  | 9     | 9             | Yes        | 2     | 4            | (P9) Collisions at 9, (2nd attempt → 9+2 → round the array to index 0 → P0 → occupied), (3rd attempt - 0+2) P2 (occupied); (4th attempt - 2+2) P4 → inserted at index 4  |
+| 9    | 31  | 9     | 9             | Yes        | 2     | 4            | (P9) Collisions at 9, (2nd attempt → 9+2 → wrap around to index 0 → P0 → occupied), (3rd attempt - 0+2) P2 (occupied); (4th attempt - 2+2) P4 → inserted at index 4  |
 | 10   | 10  | 10    | 10            | No         | --    | 10           | P10 - Inserted at index 10                                         |
 
 ### b) Final Hash Table State
@@ -500,5 +500,22 @@ def insert(table, key):
 
 ```
 
+Algorithm (in words):
+1. Compute index = h1(key).
+2. If table[index] is empty, insert key there.
+3. Otherwise, compute step = h2(key).
+4. For i from 1 to TABLE_SIZE - 1:
+   - new_index = (index + i * step) mod TABLE_SIZE
+   - If table[new_index] is empty, insert and stop.
+5. If no empty slot is found, report that the table is full.
 
+# Efficiency Analysis - Task 4:
+#### **Time Complexity**
+In the average case, each insertion takes constant time, O(1), because most keys will find an empty slot quickly. However, in the worst case, when many collisions occur, the time complexity can degrade to O(n), where n is the number of keys already in the table. This happens when the table is nearly full, and many probes are needed to find an empty slot.
 
+#### **Space Complexity**
+The space complexity of the hash table is O(m), where m is the size of the table. This is because we need to allocate space for each bucket in the table, regardless of how many keys are actually stored.
+
+# Task 5: AVL Tree
+
+Keys: [53, 65, 40, 79, 69, 92, 50, 30, 10, 55
