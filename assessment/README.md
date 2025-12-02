@@ -446,24 +446,59 @@ I31@4
 P10
 I10@10
 
-### d) Algorithm
+### d) Algorithm - I am using Python for this implementation:
 
-```java
-int hash1(int key) {
-    return key % 11;
-}
-int hash2(int key) {
-    return (key % 3) + 1;
-}
+```python
+# Size of the hash table (array of buckets)
+TABLE_SIZE = 11
 
-void insert(int key) {
-    int index = hash1(key);
-    int stepSize = hash2(key);
-    while (table[index] != null) { // Collision occurred
-        index = (index + stepSize) % tableSize; // Double hashing
-    }
-    table[index] = key; // Insert key
-}
+# hash function 1 (primary hash)
+def hash1(x):
+    return x % TABLE_SIZE
 
+# hash function 2 (used only after a collision)
+def hash2(x):
+    return (x % 3) + 1
+
+# function to insert a key into the table using double hashing
+def insert(table, key):
+    # Step 2: apply the first hash function
+    initial_index = hash1(key)
+
+    # Step 3: check if the bucket is free
+    if table[initial_index] is None:
+        # Step 4: if free, insert here
+        table[initial_index] = key
+        print(f"Inserted {key} at index {initial_index} (no collision)")
+        return
+
+    # Step 5: if the slot is occupied, apply the second hash function
+    step = hash2(key)
+
+    # number of collisions / attempts
+    i = 1
+
+    # Step 6: try new positions while respecting table boundaries
+    # try at most TABLE_SIZE times (one for each bucket)
+    while i < TABLE_SIZE:
+        new_index = (initial_index + i * step) % TABLE_SIZE
+
+        # If finded an empty spot, insert
+        if table[new_index] is None:
+            table[new_index] = key
+            print(
+                f"Inserted {key} at index {new_index} "
+                f"(after {i} collision(s))"
+            )
+            return
+
+        # otherwise, keep trying
+        i += 1
+
+    # If reached this point, the table is full or no valid position was found
+    print(f"Could not insert {key}: table is full or all positions probed")
 
 ```
+
+
+
