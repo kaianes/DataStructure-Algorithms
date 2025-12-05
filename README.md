@@ -3,6 +3,8 @@
 This repository contains implementations of classic data structures and algorithms in Java — including **Linked Lists, Stacks, Queues, Trees, Heaps**, and more.
 Each module has its own folder under `src/` and may include a `Main` file or a `*Test.java` file demonstrating how to run and test the structure.
 
+Further theory explanations and algorithm descriptions can be found [in this Notion page](https://kaiane.notion.site/Data-Structures-and-Algorithms-274c701cca24802aa688d92b30784759?source=copy_link).
+
 ---
 
 ## 📁 Project Structure
