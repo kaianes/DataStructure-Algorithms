@@ -71,7 +71,7 @@ $O(n)$
 
 ### a) BST Insertion Trace
 
-> Insertion maintain the BST property by placing smaller keys to the left and larger keys to the right. For each insertion, we compare the key to be inserted with the current node's key and decide to go left or right until we find an appropriate null position.
+> Insertion maintain the BST property by placing smaller keys to the left and larger keys to the right. For each insertion, I have compared the key to be inserted with the current node's key and decide to go left or right until I finded an appropriate null position.
 
 | Step | Key Inserted | BST After Insertion                | Explanation                                                                 |
 |------|--------------|------------------------------------|-----------------------------------------------------------------------------|
@@ -420,6 +420,7 @@ The hash table has a size of 11 slots (0 to 10) and uses open addressing with do
 
 ### c) Hash Table trace 1
 
+Hash Table trace 1
 P0
 I22@0
 P1
@@ -518,4 +519,168 @@ The space complexity of the hash table is O(m), where m is the size of the table
 
 # Task 5: AVL Tree
 
-Keys: [53, 65, 40, 79, 69, 92, 50, 30, 10, 55
+### AVL trace
+
+Sequence of keys: **53, 65, 40, 79, 69, 92, 50, 30, 10, 55**
+
+* `Ixx`      = insert xx at root
+* `IxxLyy`   = insert xx as left child of yy
+* `IxxRyy`   = insert xx as right child of yy
+* `Rxx`      = rotate the node with key xx with its parent
+
+```text
+AVL trace
+I53
+I65R53
+I40L53
+I79R65
+I69L79
+R69
+R69
+I92R79
+R69
+I50R40
+I30L40
+I10L30
+R40
+I55L65
+R53
+R53
+```
+### AVL Construction – Step-by-Step Explanation (14 Steps)
+
+#### Step 1 – Insert 53
+![Insertion of node 53](images/AVLTree/1.png)
+
+The tree is empty, so 53 becomes the root. Balanced.
+
+---
+
+#### Step 2 – Insert 65
+![Insertion of node 65](images/AVLTree/2.png)
+
+65 is inserted as the right child of 53. BF(53) = –1, still valid.
+
+---
+
+#### Step 3 – Insert 40
+![Insertion of node 40](images/AVLTree/3.png)
+
+40 is inserted as the left child of 53. BF(53) = 0. Tree remains balanced.
+
+---
+
+#### Step 4 – Insert 79
+![Insertion of node 79](images/AVLTree/4.png)
+
+79 is inserted as the right child of 65. All balance factors remain within range.
+
+---
+
+#### Step 5 – Insert 69 (Imbalance occurs)
+![Insertion of node 69](images/AVLTree/5.png)
+
+69 is inserted as the left child of 79, causing imbalance at node 65.
+
+**Imbalance type:** Right–Left (RL)  
+**Justification:**  
+Node 65 becomes right-heavy (BF = –2), but its right child 79 is left-heavy.  
+The insertion path goes: right → left.
+
+---
+
+#### Step 6 – RL Rotation
+![After RL rotation](images/AVLTree/6.png)
+
+A double rotation is applied (right rotation on 79, then left rotation on 65).  
+The subtree becomes balanced.
+
+---
+
+#### Step 7 – Insert 92 (Imbalance occurs)
+![Insertion of node 92](images/AVLTree/7.png)
+
+92 is inserted as the right child of 79, causing imbalance at the root 53.
+
+**Imbalance type:** Right–Right (RR)  
+**Justification:**  
+The insertion path from 53 goes right → right → right.  
+Node 53 becomes right-heavy with a right-heavy child.
+
+---
+
+#### Step 8 – RR Rotation
+![After RR rotation](images/AVLTree/8.png)
+
+A single left rotation is applied at node 53.  
+Node 69 becomes the new root.
+
+---
+
+#### Step 9 – Insert 50
+![Insertion of node 50](images/AVLTree/9.png)
+
+50 is inserted as the right child of 40.  
+All balance factors remain valid.
+
+---
+
+#### Step 10 – Insert 30
+![Insertion of node 30](images/AVLTree/10.png)
+
+30 is inserted as the left child of 40.  
+BF(40) becomes +1, still within limits.  
+No imbalance occurs.
+
+---
+
+#### Step 11 – Insert 10 (Imbalance occurs)
+![Insertion of node 10](images/AVLTree/11.png)
+
+10 is inserted as the left child of 30, causing imbalance at node 53.
+
+**Imbalance type:** Left–Left (LL)  
+**Justification:**  
+The insertion path goes left → left → left.  
+Node 53 becomes left-heavy with a left-heavy child 40.
+
+---
+
+#### Step 12 – LL Rotation
+![After LL rotation](images/AVLTree/12.png)
+
+A single right rotation is applied at node 53.  
+Heights realign correctly and the tree becomes balanced again.
+
+---
+
+#### Step 13 – Insert 55 (Imbalance occurs)
+![Insertion of node 55](images/AVLTree/13.png)
+
+55 is inserted as the left child of 65, causing imbalance at the root 69.
+
+**Imbalance type:** Left–Right (LR)  
+**Justification:**  
+Node 69 becomes left-heavy (BF = +2),  
+but its left subtree (rooted at 53) is right-heavy through 65 → 55.  
+Insertion path: left → right.
+
+---
+
+#### Step 14 – LR Rotation
+![After LR rotation](images/AVLTree/14.png)
+
+A double rotation corrects the imbalance:  
+1. Left rotation under the 53-subtree,  
+2. Then right rotation at 69.  
+
+This produces the final balanced AVL tree.
+
+
+#### In-order traversal and height of final tree
+
+* **In-order traversal** (should be sorted):
+  `10, 30, 40, 50, 53, 55, 65, 69, 79, 92`
+
+* **Height of final tree (root)** with leaf = 0:
+  `height(53) = 3`
