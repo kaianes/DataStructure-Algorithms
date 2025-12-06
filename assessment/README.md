@@ -549,6 +549,8 @@ R53
 ```
 ### AVL Construction – Step-by-Step Explanation (14 Steps)
 
+In each step, I will describe the insertion, any imbalance that occurs, the type of imbalance, and the rotations applied to restore balance. The height and the balance factors (BF) are written on top of each node in the diagrams as `(height, BF)`.
+
 #### Step 1 – Insert 53
 ![Insertion of node 53](images/AVLTree/1.png)
 
