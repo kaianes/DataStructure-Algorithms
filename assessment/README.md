@@ -686,3 +686,247 @@ This produces the final balanced AVL tree.
 
 * **Height of final tree (root)** with leaf = 0:
   `height(53) = 3`
+
+# Task 6: 2–4 Tree Construction and Deletion 
+
+Keys: [35, 60, 25, 40, 70, 20, 10, 90, 80, 30, 45, 50, 55]
+
+## Insertion
+
+### Step 1 — Insert 35
+
+35 is inserted into an empty 2–4 tree and becomes the root.
+
+![Insert of root](images/2-4-Tree/one.png)
+
+### Step 2 — Insert 60
+
+60 is inserted into the same node as 35.
+The root now contains two keys, which is valid.
+
+![Insert of root](images/2-4-Tree/two.png)
+
+### Step 3 — Insert 25
+
+25 is inserted into the same node.
+The root now contains three keys, the maximum allowed before splitting.
+
+![Insert of root](images/2-4-Tree/three.png)
+
+
+### Step 4 — Insert 40 (first overflow and split)
+
+Inserting 40 creates a four-key node: 25, 35, 40, 60.
+A 2–4 node cannot have four keys, so it must be split.
+
+![Insert of root](images/2-4-Tree/four.png)
+
+Split details:
+
+* The middle key 35 is promoted to become the new root.
+* Left child becomes [25].
+* Right child becomes [40|60].
+
+![Insert of root](images/2-4-Tree/1.png)
+
+
+### Step 5 — Insert 70
+
+70 is inserted into the right child, producing [40|60|70], which is full but valid.
+
+![Insert of root](images/2-4-Tree/2.png)
+
+
+### Step 6 — Insert 20
+
+20 is inserted into the left child, becoming [20|25].
+
+![Insert of root](images/2-4-Tree/3.png)
+
+
+### Step 7 — Insert 10
+
+10 is inserted into the left child, forming [10|20|25].
+
+![Insert of root](images/2-4-Tree/4.png)
+
+
+### Step 8 — Insert 90 (right child overflow and split)
+
+The node [40|60|70] overflows when inserting 90.
+![Insert of root](images/2-4-Tree/5.png)
+
+Split details:
+
+* Promote 60 to the root.
+* Left part becomes [40].
+* Right part becomes [70|90].
+* Root becomes [35|60].
+
+![Insert of root](images/2-4-Tree/6.png)
+
+### Step 9 — Insert 80
+
+80 is inserted into the rightmost child, forming [70|80|90].
+
+![Insert of root](images/2-4-Tree/7.png)
+
+
+### Step 10 — Insert 30 (left child overflow and split)
+
+Left node [10|20|25] overflows when inserting 30.
+
+![Insert of root](images/2-4-Tree/8.png)
+
+Split details:
+
+* Promote 20 to the root.
+* Left becomes [10].
+* Right becomes [25|30].
+* Root becomes [20|35|60].
+
+![Insert of root](images/2-4-Tree/9.png)
+
+
+### Step 11 — Insert 45 (root split)
+
+Before insertion, root is full [20, 35, 60].
+Standard 2-4 insertion: when root is full, split root first.
+
+![Insert of root](images/2-4-Tree/10.png)
+
+Now insert 45 into the appropriate child [40|45].
+
+![Insert of root](images/2-4-Tree/11.png)
+
+### Step 12 — Insert 50
+
+50 is inserted into the same node, forming [40|45|50].
+
+![Insert of root](images/2-4-Tree/12.png)
+
+
+### Step 13 — Insert 55 (overflow of middle-right node)
+
+The node [40|45|50] overflows when inserting 55.
+
+![Insert of root](images/2-4-Tree/13.png)
+
+Split details:
+
+* Promote 45.
+* Left becomes [40].
+* Right becomes [50|55].
+
+![Insert of root](images/2-4-Tree/14.png)
+
+## Deletion
+
+Delete the keys sequentially
+Keys: [35, 60, 25, 40, 70, 20, 10, 90, 80, 30, 45, 50, 55]
+
+### Step 1 — Delete 35 (internal key replaced by successor)
+
+35 is in the root (internal node).
+I am going to replace it with its in-order successor, which is **40** from the subtree.
+
+Then delete 40 from the leaf, causing a redistribution in that subtree (rebalances by pulling 50 up to its internal node.).
+
+![deletion](images/2-4-Tree/deletion/16.png)
+
+### Step 2 — Delete 60 (internal key replaced by successor)
+
+60 is an internal key in node [50|60].
+Its successor is **70** from the rightmost leaf.
+
+After removing 70, the leaf becomes [80|90] and no merge is needed.
+
+![deletion](images/2-4-Tree/deletion/17.png)
+
+### Step 3 — Delete 25
+
+25 is in a leaf. Removed from the leaf [25|30].
+
+![deletion](images/2-4-Tree/deletion/18.png)
+
+### Step 4 — Delete 40 (root replaced by successor + merge)
+
+40 is replaced by its successor **45**, then 45 is removed from its leaf.
+
+**Substeps:**
+* 40 (root) replaced by 45.
+* Merge [45] + 50 + [55] → [45|50|55] (Parent [50|70] loses key 50).
+* Now delete 45 from leaf [45|50|55] → [50|55].
+
+![deletion](images/2-4-Tree/deletion/19.png)
+
+### Step 5 — Delete 70 (internal key replaced by successor)
+
+* Replace 70 with 55 in that internal node → [55].
+* Delete 55 from leaf [50|55] → [50].
+
+![deletion](images/2-4-Tree/deletion/20.png)
+
+### Step 6 — Delete 20 (internal key replaced by successor + merge)
+
+**a) Prepare the child before descent**
+* Merge [20] + 45 + [55] into one node [20|45|55].
+* Combine their children: [10], [30], [50], [80|90].
+
+**b) Now delete 20 from leaf [20|45|55] → [45|55]**
+
+* Predecessor and successor child is [30] (1 key).
+* Both minimal → merge [10] + 20 + [30] into [10|20|30].
+* Delete 20 from leaf → [10|30].
+
+![deletion](images/2-4-Tree/deletion/21.png)
+
+### Step 7 — Delete 10 (simple leaf deletion)
+
+* 10 is removed from the leftmost leaf.
+
+![deletion](images/2-4-Tree/deletion/22.png)
+
+### Step 8 — Delete 90 (simple leaf deletion)
+
+* 90 is removed from the rightmost leaf.
+
+![deletion](images/2-4-Tree/deletion/23.png)
+
+### Step 9 — Delete 80 (underflow)
+
+* Merge [50], key 55, and [80].
+* The merged node becomes [50|55|80].
+* Delete 80 from leaf.
+
+![deletion](images/2-4-Tree/deletion/24.png)
+
+### Step 10 — Delete 30 (borrow from the right sibling)
+
+Borrow from right sibling:
+* Move root key 45 down to left child.
+* Move sibling key 50 up to root.
+
+![deletion](images/2-4-Tree/deletion/25.png)
+
+### Step 11 — Delete 45 (root absorbs keys)
+
+Deleting 45 from the left child allows the root to absorb 55, forming a single leaf-level node.
+![deletion](images/2-4-Tree/deletion/26.png)
+
+
+### Step 12 — Delete 50 (simple deletion from leaf)
+
+Removing 50 leaves [55].
+
+![deletion](images/2-4-Tree/deletion/27.png)
+### Step 13 — Delete 55 (tree becomes empty)
+
+Final key removed.
+
+
+Tree is now:
+
+**(empty)**
+
+![deletion](images/2-4-Tree/deletion/28.png)
