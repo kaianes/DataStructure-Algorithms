@@ -227,3 +227,128 @@ check if any path i → D → j is shorter.
 One valid topological ordering (and the one the algorithm gives if you always pick the smallest label) is:
 
 > **A, B, C, D, E, F, G, H**
+
+---
+
+### Exercises Week 10
+
+## 1) Why Dijkstra can decide using only incident edges (local info)
+
+At any moment, Dijkstra keeps:
+
+* a set **S** of “settled” nodes whose shortest distance from the start is already final, and
+* for every other node, a **best-known tentative distance**.
+
+When Dijkstra picks the next node **u** with the **smallest tentative distance**, it is guaranteed that **no other path going through unsettled nodes can produce a shorter path to u** (because every alternative would have to add a **non-negative** extra cost after leaving the already-known best frontier).
+
+So to improve distances to neighbors, Dijkstra only needs to “relax” the **edges leaving u**:
+
+$\text{if } dist[u] + w(u,v) < dist[v] \text{ then update } dist[v]$
+
+That’s enough because any new shorter route to a neighbor **must** go through some edge from the current frontier, and we always expand the frontier from the currently cheapest node.
+
+
+## 2) Required restriction on edge weights + what breaks if false
+
+**Restriction:** all edge weights must be **non-negative**.
+
+**If there are negative edges:** Dijkstra can “finalize” a node too early, and later a path using a negative edge could reduce that distance — meaning Dijkstra would return **wrong shortest paths**.
+
+## 3) Why a (modified) priority queue is used + extra method
+
+Dijkstra repeatedly needs the node with the **smallest tentative distance**.
+
+A priority queue makes this efficient:
+
+* **extract-min**: get the next closest node fast
+* **insert**: add new tentative candidates
+* **extra method (the key one): decrease-key (update priority)**
+  When you find a better distance for a node already in the queue, you must **decrease its key** (priority) to the smaller distance.
+
+## 4) Apply Dijkstra from A (all steps)
+
+**Graph edges (undirected):**
+```
+A–B=4, 
+A–F=7,
+A–E=11,
+B–F=2,
+B–C=7,
+F–C=4,
+F–D=1,
+F–E=2,
+C–D=2,
+E–D=3. 
+```
+
+Notation:
+
+* **S** = settled nodes (final shortest distance known)
+* **T** = unsettled nodes with tentative distances
+
+### Step 0 (initialize)
+
+S = ∅
+T: A=0, B=∞, C=∞, D=∞, E=∞, F=∞
+
+### Step 1 (pick A=0, relax A’s edges)
+
+From A:
+
+* B = 0+4 = **4**
+* F = 0+7 = **7**
+* E = 0+11 = **11**
+
+S = {A}
+T: B=4, F=7, E=11, C=∞, D=∞
+
+### Step 2 (pick B=4, relax B’s edges)
+
+From B:
+
+* F via B: 4+2 = **6** (better than 7 → update)
+* C via B: 4+7 = **11**
+
+S = {A, B}
+T: F=6, E=11, C=11, D=∞
+
+### Step 3 (pick F=6, relax F’s edges)
+
+From F:
+
+* D via F: 6+1 = **7**
+* E via F: 6+2 = **8** (better than 11 → update)
+* C via F: 6+4 = **10** (better than 11 → update)
+
+S = {A, B, F}
+T: D=7, E=8, C=10
+
+### Step 4 (pick D=7, relax D’s edges)
+
+From D:
+
+* C via D: 7+2 = **9** (better than 10 → update)
+* E via D: 7+3 = 10 (not better than 8)
+
+S = {A, B, F, D}
+T: E=8, C=9
+
+### Step 5 (pick E=8, relax E’s edges)
+
+From E: no improvement to remaining nodes.
+
+S = {A, B, F, D, E}
+T: C=9
+
+### Step 6 (pick C=9, done)
+
+S = {A, B, C, D, E, F}
+
+### Final shortest distances from A
+
+* dist(A)=0
+* dist(B)=4 via **A→B**
+* dist(F)=6 via **A→B→F**
+* dist(D)=7 via **A→B→F→D**
+* dist(E)=8 via **A→B→F→E**
+* dist(C)=9 via **A→B→F→D→C**
